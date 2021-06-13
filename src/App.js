@@ -1,101 +1,172 @@
-import logo from "./logo.svg";
 import "./App.css";
 import {
-  Button,
   Container,
-  Form,
-  FormInput,
   Grid,
   Header,
   Icon,
   Segment,
   Statistic,
 } from "semantic-ui-react";
+import MainHeader from "./components/MainHeader";
+import NewEntryForm from "./components/NewEntryForm";
+import DisplayBalances from "./components/DisplayBalances";
+import { useEffect, useState } from "react";
+import EntryLines from "./components/EntryLines";
+import ModalEdit from "./components/ModalEdit";
 
 function App() {
+  const [entries, setEntires] = useState(initialEntries);
+  const [description, setDescription] = useState("");
+  const [value, setValue] = useState("");
+  const [isExpense, setIsExpense] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [entryId, setEntryId] = useState();
+  const [incomeTotal, setIncomeTotal] = useState(0);
+  const [expenseTotal, setExpenseTotal] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (!isOpen && entryId) {
+      const index = entries.findIndex((entry) => entry.id === entryId);
+      const newEntries = [...entries];
+      newEntries[index].description = description;
+      newEntries[index].value = value;
+      newEntries[index].isExpense = isExpense;
+      setEntires(newEntries);
+      resetEntry();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    let totalIncome = 0;
+    let totalExpenses = 0;
+
+    entries.map((entry) => {
+      if (entry.isExpense) {
+        return (totalExpenses += Number(entry.value));
+      } else {
+        return (totalIncome += Number(entry.value));
+      }
+    });
+    let total = totalIncome - totalExpenses;
+    setTotal(total);
+    setExpenseTotal(totalExpenses);
+    setIncomeTotal(totalIncome);
+
+    console.log(
+      `total income is: ${totalIncome} and total expenses are ${totalExpenses} `
+    );
+  }, [entries]);
+
+  function resetEntry() {
+    setDescription("");
+    setValue("");
+    setIsExpense(true);
+  }
+
+  function deleteEntry(id) {
+    const result = entries.filter((entry) => entry.id !== id);
+    setEntires(result);
+  }
+
+  function addEntry() {
+    const result = entries.concat({
+      id: entries.length + 1,
+      description,
+      value,
+      isExpense,
+    });
+    console.log("entries", entries);
+    console.log("result", result);
+    setEntires(result);
+    resetEntry();
+  }
+
+  function editEntry(id) {
+    console.log(`edit entry with id ${id}`);
+
+    if (id) {
+      const index = entries.findIndex((entry) => entry.id === id);
+      console.log("index", index);
+      const entry = entries[index];
+      console.log("entry", entry.id);
+      setEntryId(id);
+      setDescription(entry.description);
+      setValue(entry.value);
+      setIsExpense(entry.isExpense);
+      setIsOpen(true);
+    }
+  }
+
   return (
     <Container>
-      <Header as="h1">Budget</Header>
+      <MainHeader title="Budget" />
       <Statistic>
         <Statistic.Label>Your Balance:</Statistic.Label>
-        <Statistic.Value>2,550.53</Statistic.Value>
+        <Statistic.Value>${total}</Statistic.Value>
       </Statistic>
-      <Segment textAlign="center">
-        <Grid columns={2} divided>
-          <Grid.Row>
-            <Grid.Column>
-              <Statistic size="tiny" color="green">
-                <Statistic.Label style={{ textAlign: "left" }}>
-                  Incoming:
-                </Statistic.Label>
-                <Statistic.Value>1,045.50</Statistic.Value>
-              </Statistic>
-            </Grid.Column>
-            <Grid.Column>
-              <Statistic size="tiny" color="red">
-                <Statistic.Label style={{ textAlign: "left" }}>
-                  Expenses:
-                </Statistic.Label>
-                <Statistic.Value>623.50</Statistic.Value>
-              </Statistic>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
+      <DisplayBalances incomeTotal={incomeTotal} expenseTotal={expenseTotal} />
       <Header as="h3">History</Header>
-      <Segment color="red">
-        <Grid columns={3} textAlign="right">
-          <Grid.Row>
-            <Grid.Column width={10} textAlign="right">
-              Something
-            </Grid.Column>
-            <Grid.Column width={3}>$10,00</Grid.Column>
-            <Grid.Column width={3}>
-              <Icon name="edit" bordered />
-              <Icon name="trash" bordered />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-      <Segment color="blue">
-        <Grid columns={3} textAlign="right">
-          <Grid.Row>
-            <Grid.Column width={10} textAlign="right">
-              Something
-            </Grid.Column>
-            <Grid.Column width={3}>$10,00</Grid.Column>
-            <Grid.Column width={3}>
-              <Icon name="edit" bordered />
-              <Icon name="trash" bordered />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-      <Header as="h3">Add new transaction</Header>
-      <Form unstackable>
-        <Form.Group>
-          <FormInput
-            icon="tags"
-            placeholder="New shinny thing"
-            width={12}
-            label="Description"
-          />
-          <Form.Input
-            width={4}
-            label="Value"
-            Placeholder="100.000"
-            icon="dollar"
-            iconPosition="left"
-          />
-        </Form.Group>
-        <Button.Group style={{ marginTop: 10 }}>
-          <Button>Cancel</Button>
-          <Button.Or />
-          <Button primary>Ok</Button>
-        </Button.Group>
-      </Form>
+
+      <EntryLines
+        entries={entries}
+        deleteEntry={deleteEntry}
+        editEntry={editEntry}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+      <ModalEdit
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        addEntry={addEntry}
+        description={description}
+        value={value}
+        isExpense={isExpense}
+        setDescription={setDescription}
+        setValue={setValue}
+        setIsExpense={setIsExpense}
+      />
+
+      <MainHeader title="Add new transaction" />
+      <NewEntryForm
+        addEntry={addEntry}
+        description={description}
+        value={value}
+        setValue={setValue}
+        isExpense={isExpense}
+        setDescription={setDescription}
+        setValue={setValue}
+        setIsExpense={setIsExpense}
+      />
     </Container>
   );
 }
+
+var initialEntries = [
+  {
+    id: 1,
+    description: "Work income",
+    value: 1000,
+    isExpense: false,
+  },
+  {
+    id: 2,
+    description: "Water bill",
+    value: 2000,
+    isExpense: true,
+  },
+  {
+    id: 3,
+    description: "Rent",
+    value: 300,
+    isExpense: true,
+  },
+  {
+    id: 4,
+    description: "Power bill",
+    value: 50,
+    isExpense: true,
+  },
+];
 
 export default App;
