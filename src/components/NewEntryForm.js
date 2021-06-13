@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import ButtonSaveOrCancel from "./ButtonSaveOrCancel";
-import { Checkbox, Form, FormInput, Segment } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import EntryForm from "./EntryForm";
 
 function NewEntryForm({
