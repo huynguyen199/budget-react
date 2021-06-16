@@ -6,29 +6,21 @@ import DisplayBalances from "./components/DisplayBalances";
 import { useEffect, useState } from "react";
 import EntryLines from "./components/EntryLines";
 import ModalEdit from "./components/ModalEdit";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [entries, setEntires] = useState(initialEntries);
-  const [description, setDescription] = useState("");
-  const [value, setValue] = useState("");
-  const [isExpense, setIsExpense] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [entryId, setEntryId] = useState();
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
   const [total, setTotal] = useState(0);
+  const [entry, setEntry] = useState();
+  const entries = useSelector((state) => state.entries);
+  const { isOpen, id } = useSelector((state) => state.modals);
 
   useEffect(() => {
-    if (!isOpen && entryId) {
-      const index = entries.findIndex((entry) => entry.id === entryId);
-      const newEntries = [...entries];
-      newEntries[index].description = description;
-      newEntries[index].value = value;
-      newEntries[index].isExpense = isExpense;
-      setEntires(newEntries);
-      resetEntry();
-    }
-  }, [isOpen]);
+    const index = entries.findIndex((entry) => entry.id === id);
+    setEntry(entries[index]);
+  }, [isOpen, id]);
 
   useEffect(() => {
     let totalIncome = 0;
@@ -51,46 +43,6 @@ function App() {
     );
   }, [entries]);
 
-  function resetEntry() {
-    setDescription("");
-    setValue("");
-    setIsExpense(true);
-  }
-
-  function deleteEntry(id) {
-    const result = entries.filter((entry) => entry.id !== id);
-    setEntires(result);
-  }
-
-  function addEntry() {
-    const result = entries.concat({
-      id: entries.length + 1,
-      description,
-      value,
-      isExpense,
-    });
-    console.log("entries", entries);
-    console.log("result", result);
-    setEntires(result);
-    resetEntry();
-  }
-
-  function editEntry(id) {
-    console.log(`edit entry with id ${id}`);
-
-    if (id) {
-      const index = entries.findIndex((entry) => entry.id === id);
-      console.log("index", index);
-      const entry = entries[index];
-      console.log("entry", entry.id);
-      setEntryId(id);
-      setDescription(entry.description);
-      setValue(entry.value);
-      setIsExpense(entry.isExpense);
-      setIsOpen(true);
-    }
-  }
-
   return (
     <Container>
       <MainHeader title="Budget" />
@@ -101,36 +53,11 @@ function App() {
       <DisplayBalances incomeTotal={incomeTotal} expenseTotal={expenseTotal} />
       <Header as="h3">History</Header>
 
-      <EntryLines
-        entries={entries}
-        deleteEntry={deleteEntry}
-        editEntry={editEntry}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
-      <ModalEdit
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        addEntry={addEntry}
-        description={description}
-        value={value}
-        isExpense={isExpense}
-        setDescription={setDescription}
-        setValue={setValue}
-        setIsExpense={setIsExpense}
-      />
+      <EntryLines entries={entries} />
+      <ModalEdit isOpen={isOpen} {...entry} />
 
       <MainHeader title="Add new transaction" />
-      <NewEntryForm
-        addEntry={addEntry}
-        description={description}
-        value={value}
-        setValue={setValue}
-        isExpense={isExpense}
-        setDescription={setDescription}
-        setValue={setValue}
-        setIsExpense={setIsExpense}
-      />
+      <NewEntryForm />
     </Container>
   );
 }
@@ -138,13 +65,13 @@ function App() {
 var initialEntries = [
   {
     id: 1,
-    description: "Work income",
+    description: "Work income redux",
     value: 1000,
     isExpense: false,
   },
   {
     id: 2,
-    description: "Water bill",
+    description: "Water bill redux",
     value: 2000,
     isExpense: true,
   },
@@ -156,7 +83,7 @@ var initialEntries = [
   },
   {
     id: 4,
-    description: "Power bill",
+    description: "Power bill redux",
     value: 50,
     isExpense: true,
   },
