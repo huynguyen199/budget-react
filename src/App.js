@@ -6,7 +6,9 @@ import DisplayBalances from "./components/DisplayBalances";
 import { useEffect, useState } from "react";
 import EntryLines from "./components/EntryLines";
 import ModalEdit from "./components/ModalEdit";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { getAllEntries } from "./Reducers/Action/Entries.action";
 
 function App() {
   const [entryId, setEntryId] = useState();
@@ -20,7 +22,7 @@ function App() {
   useEffect(() => {
     const index = entries.findIndex((entry) => entry.id === id);
     setEntry(entries[index]);
-  }, [isOpen, id]);
+  }, [isOpen, id, entries]);
 
   useEffect(() => {
     let totalIncome = 0;
@@ -42,6 +44,21 @@ function App() {
       `total income is: ${totalIncome} and total expenses are ${totalExpenses} `
     );
   }, [entries]);
+
+  async function fetchInitialData() {
+    const result = await axios.get("http://localhost:3000/entries");
+    console.log(result);
+  }
+
+  useEffect(() => {
+    fetchInitialData();
+  }, []);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllEntries());
+  }, []);
 
   return (
     <Container>
