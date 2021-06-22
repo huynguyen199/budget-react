@@ -2,26 +2,43 @@
 
   "Entries": [{
         "id": 1,
-        "description": "Work income redux",
-        "value": 1000,
-        "isExpense": false
+        "description": "Work income redux"
       },
       {
         "id": 2,
-        "description": "Water bill",
-        "value": 2000,
-        "isExpense": true
+        "description": "Water bill"
+     
       },
       {
         "id": 3,
-        "description": "Rent",
-        "value": 300,
-        "isExpense": true
+        "description": "Rent"
+      
       },
       {
         "id": 4,
-        "description": "Power bill",
-        "value": 50,
-        "isExpense": true
-      }]
+        "description": "Power bill"
+      
+      }],
+      "value":[
+        {
+          "id":1,
+          "value":1000,
+          "isExpense":false
+        },
+        {
+          "id":2,
+          "value":1000,
+          "isExpense":false
+        },
+        {
+          "id":3,
+          "value":1000,
+          "isExpense":false
+        },
+        {
+          "id":4,
+          "value":1000,
+          "isExpense":false
+        }
+      ]
 }

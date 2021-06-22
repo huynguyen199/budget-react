@@ -27,7 +27,6 @@ function App() {
   useEffect(() => {
     let totalIncome = 0;
     let totalExpenses = 0;
-
     entries.map((entry) => {
       if (entry.isExpense) {
         return (totalExpenses += Number(entry.value));
@@ -50,9 +49,9 @@ function App() {
     console.log(result);
   }
 
-  useEffect(() => {
-    fetchInitialData();
-  }, []);
+  // useEffect(() => {
+  //   fetchInitialData();
+  // }, []);
 
   const dispatch = useDispatch();
 

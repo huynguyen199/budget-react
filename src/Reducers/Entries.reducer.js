@@ -11,14 +11,15 @@ export default (state = initialEntries, action) => {
     case entriesTypes.REMOVE_ENTRY:
       newEntries = state.filter((entry) => entry.id !== action.payload.id);
       return newEntries;
+    case entriesTypes.POPULATE_ENTRY_DETAILS:
     case entriesTypes.UPDATE_ENTRY:
       newEntries = [...state];
       const index = newEntries.findIndex(
         (entry) => entry.id === action.payload.id
       );
+      console.log("action.payload.entry", action.payload.entry);
 
-      console.log("payload entry", action.payload.entry);
-      newEntries[index] = { ...action.payload.entry };
+      newEntries[index] = { ...newEntries[index], ...action.payload.entry };
       return newEntries;
     default:
       return state;
