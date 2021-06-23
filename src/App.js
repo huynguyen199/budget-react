@@ -17,6 +17,7 @@ function App() {
   const [total, setTotal] = useState(0);
   const [entry, setEntry] = useState();
   const entries = useSelector((state) => state.entries);
+  console.log("file: App.js Log: line 20 Log: App Log: entries", entries);
   const { isOpen, id } = useSelector((state) => state.modals);
 
   useEffect(() => {
@@ -46,14 +47,14 @@ function App() {
 
   async function fetchInitialData() {
     const result = await axios.get("http://localhost:3000/entries");
-    console.log(result);
+    console.log("result", result);
   }
 
-  // useEffect(() => {
-  //   fetchInitialData();
-  // }, []);
-
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getAllEntries());
@@ -66,6 +67,7 @@ function App() {
         <Statistic.Label>Your Balance:</Statistic.Label>
         <Statistic.Value>${total}</Statistic.Value>
       </Statistic>
+
       <DisplayBalances incomeTotal={incomeTotal} expenseTotal={expenseTotal} />
       <Header as="h3">History</Header>
 

@@ -1,44 +1,78 @@
 {
-
-  "Entries": [{
-        "id": 1,
-        "description": "Work income redux"
-      },
-      {
-        "id": 2,
-        "description": "Water bill"
-     
-      },
-      {
-        "id": 3,
-        "description": "Rent"
-      
-      },
-      {
-        "id": 4,
-        "description": "Power bill"
-      
-      }],
-      "value":[
-        {
-          "id":1,
-          "value":1000,
-          "isExpense":false
-        },
-        {
-          "id":2,
-          "value":1000,
-          "isExpense":false
-        },
-        {
-          "id":3,
-          "value":1000,
-          "isExpense":false
-        },
-        {
-          "id":4,
-          "value":1000,
-          "isExpense":false
-        }
-      ]
+  "Entries": [
+    {
+      "id": 1,
+      "description": "Work income redux"
+    },
+    {
+      "id": 2,
+      "description": "Water bill"
+    },
+    {
+      "id": 3,
+      "description": "Rent"
+    },
+    {
+      "id": "289732be-1897-4dbf-9648-1c2c9502fab8",
+      "description": "scac"
+    },
+    {
+      "id": "d5649111-7db6-420a-800d-aac93b1525bb",
+      "description": "ascas"
+    },
+    {
+      "id": "f32f5f74-f050-4d59-8fda-68600f4ed1ca",
+      "description": "ascas"
+    },
+    {
+      "id": "9b6a5731-5204-4f7a-b5f7-9939c23b26bb",
+      "description": "acsasc"
+    },
+    {
+      "id": "0bdffcc9-9c9c-4cba-a596-07370b3160a5",
+      "description": "sacasc"
+    }
+  ],
+  "value": [
+    {
+      "id": 1,
+      "value": 1000,
+      "isExpense": false
+    },
+    {
+      "id": 2,
+      "value": 1000,
+      "isExpense": false
+    },
+    {
+      "id": 3,
+      "value": 1000,
+      "isExpense": false
+    },
+    {
+      "id": "289732be-1897-4dbf-9648-1c2c9502fab8",
+      "value": 12312,
+      "isExpense": true
+    },
+    {
+      "id": "d5649111-7db6-420a-800d-aac93b1525bb",
+      "value": 21321,
+      "isExpense": true
+    },
+    {
+      "id": "f32f5f74-f050-4d59-8fda-68600f4ed1ca",
+      "value": 21321,
+      "isExpense": true
+    },
+    {
+      "id": "9b6a5731-5204-4f7a-b5f7-9939c23b26bb",
+      "value": 21312,
+      "isExpense": true
+    },
+    {
+      "id": "0bdffcc9-9c9c-4cba-a596-07370b3160a5",
+      "value": 213321,
+      "isExpense": false
+    }
+  ]
 }
